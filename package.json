@@ -1,10 +1,11 @@
 {
-  "name": "Maslov Sprint 12",
+  "name": "Sprint12",
   "version": "1.0.0",
   "description": "Sprint 12 Work",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "app.js",
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",

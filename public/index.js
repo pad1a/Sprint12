@@ -1,4 +1,4 @@
-import "./pages/index.css";
+//import "./pages/index.css";
 import Api from "./scripts/api.js";
 import Card from "./scripts/card.js";
 import CardList from "./scripts/cardlist.js";
@@ -6,7 +6,8 @@ import FormValidator from "./scripts/formvalidator.js";
 import Popup from "./scripts/popup.js";
 import UserInfo from "./scripts/userinfo.js";
 
-const serverUrl = process.env.NODE_ENV === 'development' ? 'http://praktikum.tk/cohort9' : 'https://praktikum.tk/cohort9';
+//const serverUrl = process.env.NODE_ENV === 'development' ? 'http://praktikum.tk/cohort9' : 'https://praktikum.tk/cohort9';
+const serverUrl = 'https://praktikum.tk/cohort9';
 const config = {
     baseUrl: serverUrl,
     //baseUrl: 'http://95.216.175.5/cohort9',
