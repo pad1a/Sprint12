@@ -2,15 +2,34 @@ const cardsRoute = require('express').Router(); // создали роутер
 const path = require('path');
 const fs = require('fs');
 
-cards = [];
-//const reader = fs.createReadStream('./data/cards.json', { encoding: 'utf8' });
-const reader = fs.createReadStream(path.join(__dirname, '../data/cards.json'), { encoding: 'utf8' });
-reader.on('data', (chunk) => {
-  cards = chunk;
-  cards = JSON.parse(cards);
-});
+const cardsPath = path.join(__dirname, '../data/cards.json');
 
-cardsRoute.get('/', (req, res) => {
+/* Проверяем наличие файла, если есть передаем выполнение дальше если нет возвращаем ошибку */
+const doesFileExist = (req, res, next) => {
+  fs.stat(cardsPath, (err, stat) => {
+    if (err == null) {
+      next();
+    } else if (err.code === 'ENOENT') {
+      return res.status(500).json({ message: 'Запрашиваемый файл не найден' });
+    } else {
+      console.log('Ошибка на сервере: ', err.code);
+    }
+  });
+};
+
+const getCardsAsyncAwait = async () => {
+  try {
+    const data = await fs.promises
+      .readFile(cardsPath, { encoding: 'utf8' });
+    return JSON.parse(data);
+  } catch (error) {
+    return console.error(error);
+  }
+};
+
+cardsRoute.get('/', doesFileExist);
+cardsRoute.get('/', async (req, res) => {
+  const cards = await getCardsAsyncAwait();
   res.send(cards);
 });
 
