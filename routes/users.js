@@ -6,14 +6,14 @@ const userPath = path.join(__dirname, '../data/users.json');
 
 /* Проверяем наличие файла, если есть передаем выполнение дальше если нет возвращаем ошибку */
 const doesFileExist = (req, res, next) => {
-  fs.stat(userPath, (err, stat) => {
+  fs.stat(userPath, (err) => {
     if (err == null) {
-      next();
-    } else if (err.code === 'ENOENT') {
-      return res.status(500).json({ message: 'Запрашиваемый файл не найден' });
-    } else {
-      console.log('Ошибка на сервере: ', err.code);
+      return next();
     }
+    if (err.code === 'ENOENT') {
+      return res.status(500).json({ message: 'Запрашиваемый файл не найден' });
+    }
+    return res.status(500).json({ message: err.code });
   });
 };
 
@@ -24,7 +24,7 @@ const getUsersAsyncAwait = async () => {
       .readFile(userPath, { encoding: 'utf8' });
     return JSON.parse(data);
   } catch (error) {
-    return console.error(error);
+    return error;
   }
 };
 
@@ -47,7 +47,7 @@ usersRoute.get('/:id', (req, res) => {
       if (!user) {
         return res.send({ message: 'Нет пользователя с таким id' });
       }
-      res.send(user);
+      return res.send(user);
     });
 });
 
